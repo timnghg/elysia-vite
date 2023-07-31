@@ -1,0 +1,32 @@
+{
+  "name": "elysia-vite",
+  "version": "0.0.1",
+  "module": "src/index.ts",
+  "repository": "github:timnghg/elysia-vite",
+  "type": "module",
+  "scripts": {
+    "test": "bun test",
+    "build": "rimraf dist && npm run build:esm && npm run build:cjs",
+    "build:esm": "swc src/index.ts -d dist && tsc --project tsconfig.esm.json",
+    "build:cjs": "tsc --project tsconfig.cjs.json --module es2020"
+  },
+  "devDependencies": {
+    "bun-types": "latest",
+    "get-port": "^7.0.0",
+    "vite": "latest",
+    "elysia": "latest",
+    "@elysiajs/html": "*"
+  },
+  "peerDependencies": {
+    "elysia": "latest",
+    "@elysiajs/html": "*"
+  },
+  "exports": {
+    ".": {
+      "bun": "./dist/index.js",
+      "node": "./dist/cjs/index.js",
+      "import": "./dist/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  }
+}
