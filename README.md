@@ -1,4 +1,4 @@
-# elysia-vite
+# elysia-vite ![Test](https://github.com/timnghg/elysia-vite/actions/workflows/main.yml/badge.svg)
 
 Simple [Elysia](https://elysiajs.com/) plugin that helps you use Vite. It serve your entry html file with Vite's scripts injected.
 
@@ -9,6 +9,7 @@ Simple [Elysia](https://elysiajs.com/) plugin that helps you use Vite. It serve 
 Please follow [Vite's offical document](https://vitejs.dev/guide/). The following code is my simple React setup.
 
 ```bash
+# Bash:
 # Install vite itself
 bun add vite -d
 
@@ -17,7 +18,7 @@ bun add @vitejs/plugin-react -d
 ```
 
 ```js
-// vite.config.ts
+// File: vite.config.ts
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
@@ -36,10 +37,11 @@ export default defineConfig({
 bun add elysia-vite
 ``` 
 
-## Usage
+## 2. Usage
 
 ### Use Elysia `elysia-vite` plugin
 ```js
+// File: index.ts
 const {Elysia} = require('elysia')
 const {elysiaVite} = require('elysia-vite')
 const app = new Elysia()

@@ -1,0 +1,24 @@
+name: Test
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        strategy:
+            matrix:
+                bun-version: [latest, canary]
+
+        steps:
+            - uses: actions/checkout@v3
+            - name: Use Bun ${{ matrix.bun-version }}
+              uses: oven-sh/setup-bun@v1
+              with:
+                  bun-version: ${{ matrix.bun-version }}
+            - run: bun install
+            - run: bun test
