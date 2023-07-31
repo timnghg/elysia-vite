@@ -1,9 +1,9 @@
-import { Elysia } from "elysia";
-import { UserConfig } from "vite";
+import {Elysia} from "elysia";
+import {UserConfig} from "vite";
 import * as path from "path";
-import { html } from "@elysiajs/html";
+import {html} from "@elysiajs/html";
 
-type ViteConfig = UserConfig & {
+export type ViteConfig = UserConfig & {
     appRootPath?: string;
     viteConfigFilePath?: string;
     placeHolderDevScripts?: string;
@@ -14,34 +14,34 @@ type ViteConfig = UserConfig & {
 
 export const elysiaViteConfig =
     <C extends ViteConfig>(options?: C) =>
-    (app: Elysia) => {
-        let isLoaded = false;
-        return app.derive(function () {
-            return {
-                async viteConfig(): Promise<ViteConfig> {
-                    if (isLoaded) return options as ViteConfig;
-                    const viteConfigPath =
-                        options?.viteConfigFilePath ||
-                        `${options?.appRootPath}/vite.config.ts` ||
-                        `${import.meta.dir}/vite.config.ts`;
+        (app: Elysia) => {
+            let isLoaded = false;
+            return app.derive(function () {
+                return {
+                    async viteConfig(): Promise<ViteConfig> {
+                        if (isLoaded) return options as ViteConfig;
+                        const viteConfigPath =
+                            options?.viteConfigFilePath ||
+                            `${options?.appRootPath}/vite.config.ts` ||
+                            `${import.meta.dir}/vite.config.ts`;
 
-                    const viteConfigFile = viteConfigPath
-                        ? Bun.file(viteConfigPath)
-                        : null;
+                        const viteConfigFile = viteConfigPath
+                            ? Bun.file(viteConfigPath)
+                            : null;
 
-                    if (viteConfigPath && (await viteConfigFile?.exists())) {
-                        const viteConfig = import.meta.require(viteConfigPath);
-                        options = {
-                            ...viteConfig?.default,
-                            ...options,
-                        };
-                    }
-                    isLoaded = true;
-                    return options as ViteConfig;
-                },
-            };
-        });
-    };
+                        if (viteConfigPath && (await viteConfigFile?.exists())) {
+                            const viteConfig = import.meta.require(viteConfigPath);
+                            options = {
+                                ...viteConfig?.default,
+                                ...options,
+                            };
+                        }
+                        isLoaded = true;
+                        return options as ViteConfig;
+                    },
+                };
+            });
+        };
 
 export const elysiaVite = (options?: ViteConfig) => async (app: Elysia) => {
     return app
@@ -81,7 +81,7 @@ export const elysiaVite = (options?: ViteConfig) => async (app: Elysia) => {
                 return context.html(
                     html.replace(
                         options?.placeHolderDevScripts ||
-                            "<!--vite-dev-scripts-->",
+                        "<!--vite-dev-scripts-->",
                         viteScripts
                     )
                 );
