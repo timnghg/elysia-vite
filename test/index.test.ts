@@ -19,12 +19,14 @@ describe("elysia-vite", async () => {
                 port: vitePort,
             },
             base: '/vite',
+            root: import.meta.dir,
             entryClientFile: "entry-client.tsx",
+            entryHtmlFile: path.resolve(import.meta.dir, "../src/index.html"),
         }));
 
     it("should serve and transform html file", async () => {
         const textHome = await app.handle(new Request(`http://localhost/`)).then(r => r.text());
-        const textVite = await app.handle(new Request(`http://localhost/vite`)).then(r => r.text());
+        const textVite = await app.handle(new Request(`http://localhost/vite/`)).then(r => r.text());
         expect(textHome).toBe("NOT_FOUND");
         expect(textVite && textVite != html).toBeTrue();
         expect(textVite.indexOf("TS + Bun + Elysia + Vite + React")).toBeGreaterThan(-1);

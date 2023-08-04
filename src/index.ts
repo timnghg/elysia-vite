@@ -48,20 +48,22 @@ export const elysiaVite = <C extends ViteConfig, >(options?: C) => async (app: E
         .use(html())
         .use(elysiaViteConfig(options))
         .group(options?.base || "/", app => app
-            .get("/*", async (context) => {
+            .get("*", async (context) => {
                 const viteConfig = await context.viteConfig();
                 const vitePort = viteConfig?.server?.port || 5173;
                 const viteHost = viteConfig?.server?.host || "localhost";
                 const viteUrl = `http://${viteHost}:${vitePort}`;
                 const entryClientFile =
                     options?.entryClientFile || "entry-client.tsx";
-                const entryHtmlFile = path.resolve(
+                const entryHtmlFile = options?.entryHtmlFile || path.resolve(
                     options?.appRootPath || options?.root || import.meta.dir,
-                    options?.entryHtmlFile || 'index.html'
+                    'index.html'
                 );
                 const htmlFile = Bun.file(entryHtmlFile);
                 if (!await htmlFile.exists()) {
-                    return console.error(`[elysia-vite] not found! entryHtmlFile=${entryHtmlFile} root=${viteConfig.root}`);
+                    console.error(`[elysia-vite] not found! entryHtmlFile=${entryHtmlFile} root=${viteConfig.root}`);
+                    context.set.status = 404;
+                    return "NOT_FOUND";
                 }
                 const html = await htmlFile.text();
                 let viteScripts = `<script type="module" src="${viteUrl}/@vite/client"></script>
