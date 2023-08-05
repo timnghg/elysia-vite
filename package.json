@@ -1,6 +1,6 @@
 {
   "name": "elysia-vite",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "module": "src/index.ts",
   "repository": "github:timnghg/elysia-vite",
   "type": "module",

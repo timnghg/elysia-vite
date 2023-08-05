@@ -13,31 +13,12 @@ export type ViteConfig = UserConfig & {
 };
 
 export const elysiaViteConfig =
-    <C extends ViteConfig>(options?: C) =>
+    <C extends ViteConfig>(config?: C) =>
         (app: Elysia) => {
-            let isLoaded = false;
             return app.derive(function () {
                 return {
                     async viteConfig(): Promise<C> {
-                        if (isLoaded) return options as C;
-                        const viteConfigPath =
-                            options?.viteConfigFilePath ||
-                            `${options?.appRootPath}/vite.config.ts` ||
-                            `${import.meta.dir}/vite.config.ts`;
-
-                        const viteConfigFile = viteConfigPath
-                            ? Bun.file(viteConfigPath)
-                            : null;
-
-                        if (viteConfigPath && (await viteConfigFile?.exists())) {
-                            const viteConfig = import.meta.require(viteConfigPath);
-                            options = {
-                                ...viteConfig?.default,
-                                ...options,
-                            };
-                        }
-                        isLoaded = true;
-                        return options as C;
+                        return await getViteConfig(config) as C;
                     },
                 };
             });
@@ -90,3 +71,24 @@ export const elysiaVite = <C extends ViteConfig, >(options?: C) => async (app: E
                 );
             }));
 };
+
+export async function getViteConfig<C extends ViteConfig>(config?: C) {
+    const viteConfigPath =
+        config?.viteConfigFilePath ||
+        `${config?.appRootPath}/vite.config.ts` ||
+        `${import.meta.dir}/vite.config.ts`;
+
+    const viteConfigFile = viteConfigPath
+        ? Bun.file(viteConfigPath)
+        : null;
+
+    if (viteConfigPath && (await viteConfigFile?.exists())) {
+        const viteConfig = import.meta.require(viteConfigPath);
+        config = {
+            ...viteConfig?.default,
+            ...config,
+        };
+    }
+
+    return config;
+}
