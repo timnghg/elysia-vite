@@ -90,5 +90,5 @@ export async function getViteConfig<C extends ViteConfig>(config?: C) {
         };
     }
 
-    return config;
+    return config as C;
 }

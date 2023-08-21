@@ -1,6 +1,6 @@
 {
   "name": "elysia-vite",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "module": "src/index.ts",
   "repository": "github:timnghg/elysia-vite",
   "type": "module",
@@ -13,8 +13,8 @@
   "devDependencies": {
     "bun-types": "latest",
     "get-port": "^7.0.0",
-    "vite": "latest",
-    "elysia": "latest",
+    "vite": "^4.4.8",
+    "elysia": "^0.5.25",
     "@elysiajs/html": "*"
   },
   "peerDependencies": {
