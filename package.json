@@ -1,32 +1,32 @@
 {
-  "name": "elysia-vite",
-  "version": "0.0.7",
-  "module": "src/index.ts",
-  "repository": "github:timnghg/elysia-vite",
-  "type": "module",
-  "scripts": {
-    "test": "bun test",
-    "build": "rimraf dist && npm run build:esm && npm run build:cjs",
-    "build:esm": "swc src/index.ts -d dist && tsc --project tsconfig.esm.json",
-    "build:cjs": "tsc --project tsconfig.cjs.json --module es2020"
-  },
-  "devDependencies": {
-    "bun-types": "latest",
-    "get-port": "^7.0.0",
-    "vite": "^4.4.8",
-    "elysia": "^0.5.25",
-    "@elysiajs/html": "*"
-  },
-  "peerDependencies": {
-    "elysia": "latest",
-    "@elysiajs/html": "*"
-  },
-  "exports": {
-    ".": {
-      "bun": "./dist/index.js",
-      "node": "./dist/cjs/index.js",
-      "import": "./dist/index.js",
-      "require": "./dist/cjs/index.js"
+    "name": "elysia-vite",
+    "version": "0.1.0",
+    "module": "src/index.ts",
+    "repository": "github:timnghg/elysia-vite",
+    "type": "module",
+    "scripts": {
+        "test": "bun test",
+        "build": "rimraf dist && npm run build:esm && npm run build:cjs",
+        "build:esm": "swc src/index.ts -d dist && tsc --project tsconfig.esm.json",
+        "build:cjs": "tsc --project tsconfig.cjs.json --module es2020"
+    },
+    "devDependencies": {
+        "bun-types": "latest",
+        "get-port": "^7.0.0",
+        "vite": "^4.4.8",
+        "elysia": "^0.5.25",
+        "@elysiajs/html": "*"
+    },
+    "peerDependencies": {
+        "elysia": "^0.6.0",
+        "@elysiajs/html": "*"
+    },
+    "exports": {
+        ".": {
+            "bun": "./dist/index.js",
+            "node": "./dist/cjs/index.js",
+            "import": "./dist/index.js",
+            "require": "./dist/cjs/index.js"
+        }
     }
-  }
 }

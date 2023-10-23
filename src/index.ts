@@ -1,7 +1,7 @@
-import {Elysia} from "elysia";
-import {UserConfig} from "vite";
+import { Elysia } from "elysia";
+import { UserConfig } from "vite";
 import * as path from "path";
-import {html} from "@elysiajs/html";
+import { html } from "@elysiajs/html";
 
 export type ViteConfig = UserConfig & {
     appRootPath?: string;
@@ -14,35 +14,44 @@ export type ViteConfig = UserConfig & {
 
 export const elysiaViteConfig =
     <C extends ViteConfig>(config?: C) =>
-        (app: Elysia) => {
-            return app.derive(function () {
-                return {
-                    async viteConfig(): Promise<C> {
-                        return await getViteConfig(config) as C;
-                    },
-                };
-            });
-        };
+    (app: Elysia) => {
+        return app.derive(function () {
+            return {
+                async viteConfig(): Promise<C> {
+                    return (await getViteConfig(config)) as C;
+                },
+            };
+        });
+    };
 
-export const elysiaVite = <C extends ViteConfig, >(options?: C) => async (app: Elysia) => {
-    return app
+export const elysiaVite = <C extends ViteConfig>(options?: C) => {
+    return new Elysia({
+        name: "elysia-vite",
+        seed: options,
+    })
         .use(html())
         .use(elysiaViteConfig(options))
-        .group(options?.base || "/", app => app
-            .get("*", async (context) => {
+        .group(options?.base || "/", (app) =>
+            app.get("*", async (context) => {
                 const viteConfig = await context.viteConfig();
                 const vitePort = viteConfig?.server?.port || 5173;
                 const viteHost = viteConfig?.server?.host || "localhost";
                 const viteUrl = `http://${viteHost}:${vitePort}`;
                 const entryClientFile =
                     options?.entryClientFile || "entry-client.tsx";
-                const entryHtmlFile = options?.entryHtmlFile || path.resolve(
-                    options?.appRootPath || options?.root || import.meta.dir,
-                    'index.html'
-                );
+                const entryHtmlFile =
+                    options?.entryHtmlFile ||
+                    path.resolve(
+                        options?.appRootPath ||
+                            options?.root ||
+                            import.meta.dir,
+                        "index.html"
+                    );
                 const htmlFile = Bun.file(entryHtmlFile);
-                if (!await htmlFile.exists()) {
-                    console.error(`[elysia-vite] not found! entryHtmlFile=${entryHtmlFile} root=${viteConfig.root}`);
+                if (!(await htmlFile.exists())) {
+                    console.error(
+                        `[elysia-vite] not found! entryHtmlFile=${entryHtmlFile} root=${viteConfig.root}`
+                    );
                     context.set.status = 404;
                     return "NOT_FOUND";
                 }
@@ -54,22 +63,23 @@ export const elysiaVite = <C extends ViteConfig, >(options?: C) => async (app: E
                 if (options?.isReact) {
                     viteScripts =
                         `<script type="module">
-  import RefreshRuntime from '${viteUrl}/@react-refresh'
-  RefreshRuntime.injectIntoGlobalHook(window)
-  window.$RefreshReg$ = () => {}
-  window.$RefreshSig$ = () => (type) => type
-  window.__vite_plugin_react_preamble_installed__ = true
+import RefreshRuntime from '${viteUrl}/@react-refresh'
+RefreshRuntime.injectIntoGlobalHook(window)
+window.$RefreshReg$ = () => {}
+window.$RefreshSig$ = () => (type) => type
+window.__vite_plugin_react_preamble_installed__ = true
 </script>` + viteScripts;
                 }
 
                 return context.html(
                     html.replace(
                         options?.placeHolderDevScripts ||
-                        "<!--vite-dev-scripts-->",
+                            "<!--vite-dev-scripts-->",
                         viteScripts
                     )
                 );
-            }));
+            })
+        );
 };
 
 export async function getViteConfig<C extends ViteConfig>(config?: C) {
@@ -78,9 +88,7 @@ export async function getViteConfig<C extends ViteConfig>(config?: C) {
         `${config?.appRootPath}/vite.config.ts` ||
         `${import.meta.dir}/vite.config.ts`;
 
-    const viteConfigFile = viteConfigPath
-        ? Bun.file(viteConfigPath)
-        : null;
+    const viteConfigFile = viteConfigPath ? Bun.file(viteConfigPath) : null;
 
     if (viteConfigPath && (await viteConfigFile?.exists())) {
         const viteConfig = import.meta.require(viteConfigPath);
