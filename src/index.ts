@@ -29,8 +29,8 @@ export const elysiaVite = <C extends ViteConfig>(options?: C) => {
         name: "elysia-vite",
         seed: options,
     })
-        .use(html())
         .use(elysiaViteConfig(options))
+        .use(html())
         .group(options?.base || "/", (app) =>
             app.get("*", async (context) => {
                 const viteConfig = await context.viteConfig();
@@ -71,12 +71,9 @@ window.__vite_plugin_react_preamble_installed__ = true
 </script>` + viteScripts;
                 }
 
-                return context.html(
-                    html.replace(
-                        options?.placeHolderDevScripts ||
-                            "<!--vite-dev-scripts-->",
-                        viteScripts
-                    )
+                return html.replace(
+                    options?.placeHolderDevScripts || "<!--vite-dev-scripts-->",
+                    viteScripts
                 );
             })
         );

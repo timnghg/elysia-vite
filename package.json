@@ -13,13 +13,13 @@
     "devDependencies": {
         "bun-types": "latest",
         "get-port": "^7.0.0",
-        "vite": "^4.4.8",
-        "elysia": "^0.5.25",
-        "@elysiajs/html": "*"
+        "rimraf": "^5.0.5",
+        "swc": "^1.0.11",
+        "vite": "^4.4.8"
     },
     "peerDependencies": {
-        "elysia": "^0.6.0",
-        "@elysiajs/html": "*"
+        "elysia": "^0.7.0",
+        "@elysiajs/html": "^0.7.0"
     },
     "exports": {
         ".": {
@@ -28,5 +28,9 @@
             "import": "./dist/index.js",
             "require": "./dist/cjs/index.js"
         }
+    },
+    "dependencies": {
+        "@elysiajs/html": "^0.7.3",
+        "elysia": "^0.7.17"
     }
 }
