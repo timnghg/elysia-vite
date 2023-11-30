@@ -51,7 +51,7 @@ const app = new Elysia()
         viteConfigFile: `${import.meta.dir}/vite.config.ts`, // absolute path to your vite config file
         entryHtmlFile: `${import.meta.dir}/src/client/index.html`, // absolute path to your entry html file
         entryClientFile: `${import.meta.dir}/src/client/index.tsx`, // absolute path to your entry script file
-        isReact: true, // inject React's specific HRM code @see https://vitejs.dev/guide/api-hmr.html
+        isReact: true, // inject React's specific HMR code @see https://vitejs.dev/guide/api-hmr.html
         placeHolderDevScripts: '<!--vite-dev-scripts-->', // placeholder to replace vite scripts
     }))
     .listen(3000)
